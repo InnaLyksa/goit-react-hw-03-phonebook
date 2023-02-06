@@ -5,7 +5,7 @@ import { ContactListItem, ContactText, DeleteBtn } from './ContactItem.styled';
 export const ContactItem = ({ id, name, number, onDeleteContact }) => {
   return (
     <ContactListItem>
-      <ContactText href="tel:{number}">
+      <ContactText href={`tel:${number}`}>
         <Phone />
         {name}: {number}
       </ContactText>
