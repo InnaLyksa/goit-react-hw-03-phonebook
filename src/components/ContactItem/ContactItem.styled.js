@@ -11,13 +11,29 @@ export const ContactListItem = styled.li`
   }
 `;
 
-export const ContactText = styled.span`
-  font-size: 24px;
+// export const ContactText = styled.span`
+//   font-size: 24px;
 
-  &::before {
-    content: '✔️';
+//   &::before {
+//     content: '✔️';
+//     margin-right: 5px;
+//     font-size: 24px;
+//   }
+// `;
+
+export const ContactText = styled.a`
+  font-size: 24px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+
+  & > svg {
     margin-right: 5px;
-    font-size: 24px;
+    /* font-size: 24px; */
+    width: 30px;
+    height: 30px;
+    fill: #086908;
   }
 `;
 export const DeleteBtn = styled.button`
