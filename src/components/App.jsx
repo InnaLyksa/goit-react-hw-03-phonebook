@@ -1,18 +1,42 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ContactList, ContactForm, Filter } from 'components';
 import { Container, SectionHeader, PageHeader } from './App.styled';
+import { saveToLocalStorage, getFromLocalStorage } from '../utils/localStorage';
+
+const KEY_CONTACTS = 'contacts';
 
 export class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    // console.log('App componentDidMount');
+
+    this.setState({ contacts: getFromLocalStorage(KEY_CONTACTS) });
+  }
+
+  componentDidUpdate(_, prevState) {
+    // console.log('App componentDidUpdate');
+    const { state, getFilteredContacts, cleanFilter } = this;
+
+    const noFilteredContacts =
+      state.filter && getFilteredContacts().length === 0;
+    // console.log(prevState);
+    // console.log(state);
+
+    if (state.contacts !== prevState.contacts) {
+      // console.log('Update contacts');
+      saveToLocalStorage(KEY_CONTACTS, state.contacts);
+    }
+    if (noFilteredContacts) {
+      cleanFilter();
+    }
+  }
 
   addContact = (newName, newNumber) => {
     // console.log(newName, newNumber);
@@ -33,20 +57,20 @@ export class App extends Component {
     const { name, number } = newContact;
 
     if (this.checkedDublicateName(name)) {
-      alert(`${name}  is already in contacts`);
+      toast.warn(`${name} is already in contacts`, {
+        position: 'top-center',
+        autoClose: 2000,
+      });
     } else if (this.checkedDublicateNumber(number)) {
-      alert(` ${number} is already in contacts`);
+      toast.warn(`${number} is already in contacts`, {
+        position: 'top-center',
+        autoClose: 2000,
+      });
     } else {
       this.setState(({ contacts }) => ({
         contacts: [newContact, ...contacts],
       }));
     }
-
-    // this.checkedDublicateName(name) || this.checkedDublicateNumber(number)
-    //   ? alert(`${name} or ${number} is already in contacts`)
-    //   : this.setState(({ contacts }) => ({
-    //       contacts: [newContact, ...contacts],
-    //     }));
   };
 
   checkedDublicateNumber = dublicateNumber =>
@@ -70,9 +94,19 @@ export class App extends Component {
   getFilteredContacts = () => {
     const { contacts, filter } = this.state;
     const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
+    const filteredContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
+    return filteredContacts;
+  };
+
+  cleanFilter = () => {
+    toast.info("There's no such contact", {
+      toastId: 'toast-filter',
+      position: 'top-center',
+      autoClose: 1000,
+    });
+    setTimeout(() => this.setState({ filter: '' }), 2000);
   };
 
   render() {
@@ -93,6 +127,7 @@ export class App extends Component {
           contacts={getFilteredContacts()}
           deleteContact={deleteContact}
         />
+        <ToastContainer />
       </Container>
     );
   }
