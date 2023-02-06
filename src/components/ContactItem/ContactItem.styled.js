@@ -4,7 +4,7 @@ export const ContactListItem = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 450px;
+  width: 400px;
 
   &:not(:last-child) {
     margin-bottom: 8px;
@@ -22,7 +22,7 @@ export const ContactListItem = styled.li`
 // `;
 
 export const ContactText = styled.a`
-  font-size: 24px;
+  font-size: 20px;
   text-decoration: none;
   color: inherit;
   display: flex;
