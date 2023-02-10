@@ -60,11 +60,13 @@ export class App extends Component {
       toast.warn(`${name} is already in contacts`, {
         position: 'top-center',
         autoClose: 2000,
+        theme: 'colored',
       });
     } else if (this.checkedDublicateNumber(number)) {
       toast.warn(`${number} is already in contacts`, {
         position: 'top-center',
         autoClose: 2000,
+        theme: 'colored',
       });
     } else {
       this.setState(({ contacts }) => ({
@@ -105,6 +107,7 @@ export class App extends Component {
       toastId: 'toast-filter',
       position: 'top-center',
       autoClose: 1000,
+      theme: 'colored',
     });
     setTimeout(() => this.setState({ filter: '' }), 2000);
   };
