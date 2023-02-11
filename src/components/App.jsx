@@ -15,44 +15,21 @@ export class App extends Component {
   };
 
   componentDidMount() {
-    // console.log('App componentDidMount');
-
     this.setState({ contacts: getFromLocalStorage(KEY_CONTACTS) });
   }
 
   componentDidUpdate(_, prevState) {
-    // console.log('App componentDidUpdate');
-    const { state, getFilteredContacts, cleanFilter } = this;
-
-    const noFilteredContacts =
-      state.filter && getFilteredContacts().length === 0;
-    // console.log(prevState);
-    // console.log(state);
-
-    if (state.contacts !== prevState.contacts) {
-      // console.log('Update contacts');
-      saveToLocalStorage(KEY_CONTACTS, state.contacts);
-    }
-    if (noFilteredContacts) {
-      cleanFilter();
+    if (this.state.contacts !== prevState.contacts) {
+      saveToLocalStorage(KEY_CONTACTS, this.state.contacts);
     }
   }
 
   addContact = (newName, newNumber) => {
-    // console.log(newName, newNumber);
     const newContact = {
       id: nanoid(),
       name: newName,
       number: newNumber,
     };
-
-    // const { name } = newContact;
-
-    // this.checkedDublicateName(name)
-    //   ? alert(`${name}  is already in contacts`)
-    //   : this.setState(({ contacts }) => ({
-    //       contacts: [newContact, ...contacts],
-    //     }));
 
     const { name, number } = newContact;
 
@@ -100,16 +77,6 @@ export class App extends Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
     return filteredContacts;
-  };
-
-  cleanFilter = () => {
-    toast.info("There's no such contact", {
-      toastId: 'toast-filter',
-      position: 'top-center',
-      autoClose: 1000,
-      theme: 'colored',
-    });
-    setTimeout(() => this.setState({ filter: '' }), 2000);
   };
 
   render() {
